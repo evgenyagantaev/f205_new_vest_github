@@ -2,8 +2,12 @@
 #include "rtc.h"
 #include "tim.h"
 #include "gpio.h"
+#include "usart.h"
+#include "spi.h"
 
 #include "timer_250hz_interface.h"
+#include "bluetooth_interface.h"
+#include "ad7792_interface.h"
 
 /* Private function prototypes -----------------------------------------------*/
 void SystemClock_Config(void);
@@ -16,25 +20,59 @@ int timer_250hz_flag;
 
 int main(void)
 {
+	/* MCU Configuration----------------------------------------------------------*/
+
 	/* Reset of all peripherals, Initializes the Flash interface and the Systick. */
 	HAL_Init();
 
+	/* Configure the system clock */
 	SystemClock_Config();
 
 	/* Initialize all configured peripherals */
-	MX_GPIO_Init();
+
 	MX_RTC_Init();
 	MX_TIM2_Init();
+	MX_USART1_UART_Init();
+	MX_SPI2_Init();
+	SPI2->CR1 |= SPI_CR1_SPE;
+
+	MX_GPIO_Init();
+
+	// turn on analog circuit
+	HAL_GPIO_WritePin(analog_on_GPIO_Port, analog_on_Pin, GPIO_PIN_SET);
+
+	// debug
+	/***************************************************************
+	while(1)
+	{
+		while ((SPI2->SR & SPI_FLAG_TXE) == RESET );
+		int i;
+		for(i=0; i<70; i++)
+		{
+			i++;
+			i--;
+		}
+		SPI2->DR=0x55;
+	}
+
+	//*/
+
+
+	HAL_GPIO_WritePin(GPIOC, blue_led_Pin, GPIO_PIN_RESET);
 
 	/* Disable SysTick Interrupt */
 	SysTick->CTRL &= ~SysTick_CTRL_TICKINT_Msk;
 
+	bluetooth_obj_init();
+	ad7792_object_init();
 	timer_250hz_object_init();
 	timer_250hz_start();
+
 
 	int i=0;
 	i++;
 
+	HAL_GPIO_WritePin(GPIOC, blue_led_Pin, GPIO_PIN_SET);
 	while (1)
 	{
 		/*

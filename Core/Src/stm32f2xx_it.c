@@ -1,5 +1,6 @@
 #include "main.h"
 #include "stm32f2xx_it.h"
+#include "usart.h"
 
 #include "timer_250hz_interface.h"
 
@@ -149,7 +150,14 @@ void TIM2_IRQHandler(void)
 
 }
 
-/* USER CODE BEGIN 1 */
 
-/* USER CODE END 1 */
-/************************ (C) COPYRIGHT STMicroelectronics *****END OF FILE****/
+void USART1_IRQHandler(void)
+{
+  /* USER CODE BEGIN USART1_IRQn 0 */
+
+  /* USER CODE END USART1_IRQn 0 */
+  HAL_UART_IRQHandler(&huart1);
+  /* USER CODE BEGIN USART1_IRQn 1 */
+
+  /* USER CODE END USART1_IRQn 1 */
+}

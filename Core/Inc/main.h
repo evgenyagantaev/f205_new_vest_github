@@ -30,6 +30,9 @@ extern "C" {
 /* Includes ------------------------------------------------------------------*/
 #include "stm32f2xx_hal.h"
 
+#include "stdio.h"
+#include "string.h"
+
 /* Private includes ----------------------------------------------------------*/
 /* USER CODE BEGIN Includes */
 
@@ -64,6 +67,8 @@ void Error_Handler(void);
 #define green_led_GPIO_Port GPIOC
 #define red_led_Pin GPIO_PIN_2
 #define red_led_GPIO_Port GPIOC
+#define analog_on_Pin GPIO_PIN_4
+#define analog_on_GPIO_Port GPIOC
 /* USER CODE BEGIN Private defines */
 
 /* USER CODE END Private defines */
