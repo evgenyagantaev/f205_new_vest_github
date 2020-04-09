@@ -69,6 +69,10 @@ void Error_Handler(void);
 #define red_led_GPIO_Port GPIOC
 #define analog_on_Pin GPIO_PIN_4
 #define analog_on_GPIO_Port GPIOC
+#define power_button_Pin GPIO_PIN_2
+#define power_button_GPIO_Port GPIOA
+#define power_on_Pin GPIO_PIN_3
+#define power_on_GPIO_Port GPIOA
 /* USER CODE BEGIN Private defines */
 
 /* USER CODE END Private defines */

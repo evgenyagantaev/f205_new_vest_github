@@ -8,6 +8,7 @@
 #include "timer_250hz_interface.h"
 #include "bluetooth_interface.h"
 #include "ad7792_interface.h"
+#include "power_button_interface.h"
 
 /* Private function prototypes -----------------------------------------------*/
 void SystemClock_Config(void);
@@ -38,6 +39,8 @@ int main(void)
 
 	MX_GPIO_Init();
 
+	// turn on power
+	HAL_GPIO_WritePin(power_on_GPIO_Port, power_on_Pin, GPIO_PIN_SET);
 	// turn on analog circuit
 	HAL_GPIO_WritePin(analog_on_GPIO_Port, analog_on_Pin, GPIO_PIN_SET);
 
@@ -91,6 +94,7 @@ int main(void)
 		//*/
 
 		timer_250hz_action();
+		power_button_action();
 
 	}
 

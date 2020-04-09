@@ -34,6 +34,7 @@ void timer_250hz_action()
 	{
 		timer_250hz_flag = 0;
 		timer_250hz_counter++;
+		timer_250hz_tick++;
 
 		// debug
 		//sprintf(message, "371I371\r\n");
@@ -67,4 +68,9 @@ void timer_250hz_start()
 {
 	__HAL_TIM_ENABLE_IT(&htim2, TIM_IT_UPDATE);
 	__HAL_TIM_ENABLE(&htim2);
+}
+
+uint32_t timer_250hz_get_tick()
+{
+	return timer_250hz_tick;
 }
