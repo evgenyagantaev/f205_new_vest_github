@@ -1,7 +1,7 @@
 #ifndef QRS_INTERFACE_H
 #define QRS_INTERFACE_H
 
-static int test_flag = 0;
+//static int test_flag = 0;
 
 int qrs_detection_task_get_test_flag();
 void qrs_detection_task_set_test_flag();
@@ -20,5 +20,9 @@ void set_new_rr_interval_flag(int flag);
 uint32_t qrs_get_new_rr_interval();
 
 void qrs_action();
+
+void qrsDetect(void);
+
+void qrs_shift_array(int32_t *array, int LENGTH);
 
 #endif // QRS_INTERFACE_H

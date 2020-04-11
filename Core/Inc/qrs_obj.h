@@ -66,8 +66,6 @@ static int asystolyShiftCounter = 0;
 
 
 
-void qrsDetect(void);
 
-void qrs_shift_array(int32_t *array, int LENGTH);
 
 #endif // QRS_OBJ_H

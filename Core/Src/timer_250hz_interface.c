@@ -8,6 +8,7 @@
 
 #include "ecg_ring_buffer_interface.h"
 #include "isoline_interface.h"
+#include "heart_rate_interface.h"
 
 static char message[128];
 
@@ -62,7 +63,7 @@ void timer_250hz_action()
 			timer_250hz_counter = 0;
 			HAL_GPIO_TogglePin(GPIOC, green_led_Pin);
 
-			sprintf(message, "c%dp%03dm%dv%03db%03di%08ldG\r\n", 1, 71, 5, 83, 171, (long int)1003007);
+			sprintf(message, "c%dp%03dm%dv%03db%03di%08ldG\r\n", 1, get_current_heartrate(), 5, 83, 171, (long int)1003007);
 			HAL_UART_Transmit(&huart1, (uint8_t *)message, strlen(message), 500);  //send escape sequence if connection is active
 
 		}

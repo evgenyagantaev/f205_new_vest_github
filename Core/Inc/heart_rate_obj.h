@@ -1,14 +1,7 @@
-/*
- * heart_rate_obj.h
- *
- *  Created on: Sep 10, 2016
- *      Author: root
- */
+#ifndef HEART_RATE_OBJ_H
+#define HEART_RATE_OBJ_H
 
-#ifndef INC_HEART_RATE_OBJ_H_
-#define INC_HEART_RATE_OBJ_H_
-
-#include "stdint.h"
+#include "main.h"
 
 #define BUFFER_LENGTH 5
 // heart rate buffers length
@@ -29,16 +22,11 @@ uint32_t quarantine_heart_rate_buffer[BUFFER_LENGTH];
 static int new_regular_heart_rate_ready_flag = 0;
 
 
-void heart_rate_init();
 
-int get_current_heartrate();
-void heart_rate_set_asystoly();
-void hr_set_new_rr_interval(uint32_t interval);
-void heart_rate_calculate(void);
 
 uint32_t hr_calculate_average(uint32_t *array, int LENGTH);
 
 double abs_dbl(double data);
 
 
-#endif /* INC_HEART_RATE_OBJ_H_ */
+#endif // HEART_RATE_OBJ_H

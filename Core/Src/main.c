@@ -12,6 +12,7 @@
 #include "isoline_interface.h"
 #include "ecg_ring_buffer_interface.h"
 #include "qrs_interface.h"
+#include "heart_rate_interface.h"
 
 /* Private function prototypes -----------------------------------------------*/
 void SystemClock_Config(void);
@@ -70,9 +71,9 @@ int main(void)
 	SysTick->CTRL &= ~SysTick_CTRL_TICKINT_Msk;
 
 	ecg_ring_buffer_object_init();
-
 	bluetooth_obj_init();
 	ad7792_object_init();
+	heart_rate_init();
 	timer_250hz_object_init();
 	timer_250hz_start();
 
@@ -102,6 +103,7 @@ int main(void)
 		power_button_action();
 		isoline_action();
 		qrs_action();
+		heart_rate_action();
 
 	}
 
