@@ -9,6 +9,9 @@
 #include "bluetooth_interface.h"
 #include "ad7792_interface.h"
 #include "power_button_interface.h"
+#include "isoline_interface.h"
+#include "ecg_ring_buffer_interface.h"
+#include "qrs_interface.h"
 
 /* Private function prototypes -----------------------------------------------*/
 void SystemClock_Config(void);
@@ -66,6 +69,8 @@ int main(void)
 	/* Disable SysTick Interrupt */
 	SysTick->CTRL &= ~SysTick_CTRL_TICKINT_Msk;
 
+	ecg_ring_buffer_object_init();
+
 	bluetooth_obj_init();
 	ad7792_object_init();
 	timer_250hz_object_init();
@@ -95,6 +100,8 @@ int main(void)
 
 		timer_250hz_action();
 		power_button_action();
+		isoline_action();
+		qrs_action();
 
 	}
 

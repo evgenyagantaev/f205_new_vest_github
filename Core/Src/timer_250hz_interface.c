@@ -6,6 +6,9 @@
 #include "tim.h"
 #include "usart.h"
 
+#include "ecg_ring_buffer_interface.h"
+#include "isoline_interface.h"
+
 static char message[128];
 
 void timer_250hz_flag_set()
@@ -36,11 +39,12 @@ void timer_250hz_action()
 		timer_250hz_counter++;
 		timer_250hz_tick++;
 
-		// debug
-		//sprintf(message, "371I371\r\n");
-
 		//uint32_t sample = 0;
 		uint32_t sample = ad7792_read_data();
+		ecg_ring_buffer_push(sample);
+		isoline_add_new_sample(sample);
+
+		/*
 		sprintf(message, "%uI%u\r\n", (unsigned int)sample, (unsigned int)sample);
 
 		int i;
@@ -51,6 +55,7 @@ void timer_250hz_action()
 			// now TX register is empty, we can transmit
 			huart1.Instance->DR = (uint16_t)message[i];
 		}
+		//*/
 
 		if(timer_250hz_counter >= 500)
 		{
