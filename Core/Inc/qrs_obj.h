@@ -37,7 +37,7 @@ static int qrs_new_sample_added_flag;
 static int qrs_suspend_flag = 0;
 
 static int32_t qrs_suspend_marker = 0;
-static int32_t samples_counter;
+//static int32_t samples_counter;
 // bazovyi uroven' izolinii, pri kotorom proizoshlo prevyshenie poroga
 // pri detektirovanii R-zubtca
 // my zamorazhivaem etot uroven', kak tol'ko detektirovali prevyshenie

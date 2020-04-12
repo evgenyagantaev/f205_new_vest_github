@@ -15,7 +15,7 @@ void qrs_action()
 
 
 		//*
-		sprintf(message, "%dI%d\r\n", qrs_window[0], isoline_window[0]);
+		sprintf(message, "%uI%u\r\n", (unsigned int)qrs_window[0], (unsigned int)isoline_window[0]);
 		//sprintf(message, "%dI%d\r\n", qrs_window[0] - isoline_window[0], 0);
 		//sprintf(message, "%dI%d\r\n", isoline_window[0], isoline_window[0]);
 		HAL_UART_Transmit(&huart1, (uint8_t *)message, strlen(message), 500);  // for production board
@@ -28,7 +28,7 @@ void qrs_action()
 		//*/
 
 		if(markers[0] == REDMARKER)
-			HAL_UART_Transmit(&huart1, "R\r\n", 3, 500);  // for production board
+			HAL_UART_Transmit(&huart1, (uint8_t *)"R\r\n", 3, 500);  // for production board
 
 
 		/*
