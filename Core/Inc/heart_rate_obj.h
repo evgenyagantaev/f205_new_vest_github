@@ -3,9 +3,8 @@
 
 #include "main.h"
 
-#define BUFFER_LENGTH 5
 // heart rate buffers length
-static const uint16_t REGULARANDQUARANTINEBUFFERLENGTH = 5;
+#define REGULARANDQUARANTINEBUFFERLENGTH 5
 // maximum appropriate deviation of heart rate from mean value of buffer
 // (percents)
 static const uint16_t MAXHEARTRATEDEVIATION = 10;
@@ -17,8 +16,8 @@ static uint32_t new_heart_rate;
 static uint32_t regular_average;
 static uint32_t quarantine_average;
 
-uint32_t regular_heart_rate_buffer[BUFFER_LENGTH];
-uint32_t quarantine_heart_rate_buffer[BUFFER_LENGTH];
+uint32_t regular_heart_rate_buffer[REGULARANDQUARANTINEBUFFERLENGTH];
+uint32_t quarantine_heart_rate_buffer[REGULARANDQUARANTINEBUFFERLENGTH];
 static int new_regular_heart_rate_ready_flag = 0;
 
 

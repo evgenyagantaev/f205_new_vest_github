@@ -17,9 +17,7 @@ void heart_rate_action()
 
 		uint32_t new_rr_interval = qrs_get_new_rr_interval();
 		hr_set_new_rr_interval(new_rr_interval);
-		HAL_GPIO_WritePin(GPIOC, blue_led_Pin, GPIO_PIN_SET);
-		HAL_GPIO_WritePin(GPIOC, red_led_Pin, GPIO_PIN_SET);
-		HAL_GPIO_WritePin(GPIOC, green_led_Pin, GPIO_PIN_RESET);
+
 		heart_rate_calculate();
 	}
 }
@@ -29,8 +27,13 @@ void heart_rate_init()
 {
 	int i;
 
-	for(i=0; i<BUFFER_LENGTH; i++)
+	for(i=0; i<REGULARANDQUARANTINEBUFFERLENGTH; i++)
+	{
 		regular_heart_rate_buffer[i] = 75;
+		quarantine_heart_rate_buffer[i] = 75;
+	}
+	regular_average = hr_calculate_average(regular_heart_rate_buffer, REGULARANDQUARANTINEBUFFERLENGTH);
+	quarantine_average = hr_calculate_average(quarantine_heart_rate_buffer, REGULARANDQUARANTINEBUFFERLENGTH);
 
 	current_heartrate = 444;
 }
@@ -58,75 +61,76 @@ void hr_set_new_rr_interval(uint32_t interval)
 void heart_rate_calculate(void)
 {
 
-  // calculate heartRate
+	// calculate heartRate
 	new_heart_rate = 60000 / qrs_get_new_rr_interval();
 
-  // look up what about to insert this heart rate in regular buffer
-  if((abs_dbl(new_heart_rate - regular_average)*100/regular_average) < MAXHEARTRATEDEVIATION)
-  {
-	 //shift regular and quarantine buffers
-	 for(int i=0; i<(REGULARANDQUARANTINEBUFFERLENGTH - 1); i++)
-	 {
-		 regular_heart_rate_buffer[i] = regular_heart_rate_buffer[i+1];
-		 quarantine_heart_rate_buffer[i] = quarantine_heart_rate_buffer[i+1];
-	 }
-	 // add value in regular and quarantine buffers
-	 regular_heart_rate_buffer[REGULARANDQUARANTINEBUFFERLENGTH - 1] = new_heart_rate;
-	 quarantine_heart_rate_buffer[REGULARANDQUARANTINEBUFFERLENGTH - 1] = new_heart_rate;
+	// look up what about to insert this heart rate in regular buffer
+	if((abs_dbl(new_heart_rate - regular_average)*100/regular_average) < MAXHEARTRATEDEVIATION)
+	{
+		//shift regular and quarantine buffers
+		for(int i=0; i<(REGULARANDQUARANTINEBUFFERLENGTH - 1); i++)
+		{
+			regular_heart_rate_buffer[i] = regular_heart_rate_buffer[i+1];
+			quarantine_heart_rate_buffer[i] = quarantine_heart_rate_buffer[i+1];
+		}
+		// add value in regular and quarantine buffers
+		regular_heart_rate_buffer[REGULARANDQUARANTINEBUFFERLENGTH - 1] = new_heart_rate;
+		quarantine_heart_rate_buffer[REGULARANDQUARANTINEBUFFERLENGTH - 1] = new_heart_rate;
 
-	 // set flag for rr interval collection procedure
-	 new_regular_heart_rate_ready_flag = 1;
+		// set flag for rr interval collection procedure
+		new_regular_heart_rate_ready_flag = 1;
 
 
-	 // calculate average of regular buffer
-	 regular_average = hr_calculate_average(regular_heart_rate_buffer, REGULARANDQUARANTINEBUFFERLENGTH);
-	 if(current_heartrate == 444) // there was not real pulse yet
-	 {
-		if((regular_average < 160) && (regular_average > 40)) // if normal start pulse
+		// calculate average of regular buffer
+		regular_average = hr_calculate_average(regular_heart_rate_buffer, REGULARANDQUARANTINEBUFFERLENGTH);
+		if(current_heartrate == 444) // there was not real pulse yet
+		{
+			if((regular_average < 160) && (regular_average > 40)) // if normal start pulse
 			current_heartrate = regular_average;
-	 }
-	 else
-		 current_heartrate = regular_average;
-
-	 // calculate average of quarantine buffer
-	 quarantine_average = hr_calculate_average(quarantine_heart_rate_buffer, REGULARANDQUARANTINEBUFFERLENGTH);
-  }//end if((abs(heartRate - regularAverage)*100/regularAverage) < MAXHEARTRATEDEVIATION)
-  else // here is an excess of permissible deviation from average
-  {
-	 // so we add value in quarantine buffer *******************************
-
-	 // shift quarantine buffer
-	 for(int i=0; i<(REGULARANDQUARANTINEBUFFERLENGTH - 1); i++)
-	 {
-		 quarantine_heart_rate_buffer[i] = quarantine_heart_rate_buffer[i+1];
-	 }
-	 // add value
-	 quarantine_heart_rate_buffer[REGULARANDQUARANTINEBUFFERLENGTH - 1] = new_heart_rate;
-	 // calculate average of quarantine buffer
-	 quarantine_average = hr_calculate_average(quarantine_heart_rate_buffer, REGULARANDQUARANTINEBUFFERLENGTH);
-
-	 // check if we have to open quarantine ********************************
-
-	 // check the deviation of quarantine buffer content from a quarantine mean
-	 int deviationOk = 1;
-	 int i = 0;
-	 while (deviationOk && (i < REGULARANDQUARANTINEBUFFERLENGTH))
-	 {
-		if (abs_dbl((quarantine_heart_rate_buffer[i] - quarantine_average) * 100 / quarantine_average) > MAXHEARTRATEDEVIATION)
-			   deviationOk = 0;
+		}
 		else
-			   i++;
-	 }
+			current_heartrate = regular_average;
 
-	 // if deviation ok, open quarantine (copy quarantine buffer in
-	 // regular buffer)
-	 if (deviationOk)
-	 {
-		for (int i = 0; i < REGULARANDQUARANTINEBUFFERLENGTH; i++)
-			regular_heart_rate_buffer[i] = quarantine_heart_rate_buffer[i];
-		regular_average = quarantine_average;
-	 }
-  }// end else
+		// calculate average of quarantine buffer
+		quarantine_average = hr_calculate_average(quarantine_heart_rate_buffer, REGULARANDQUARANTINEBUFFERLENGTH);
+	}//end if((abs(heartRate - regularAverage)*100/regularAverage) < MAXHEARTRATEDEVIATION)
+	else // here is an excess of permissible deviation from average
+	{
+		// so we add value in quarantine buffer *******************************
+
+		// shift quarantine buffer
+		for(int i=0; i<(REGULARANDQUARANTINEBUFFERLENGTH - 1); i++)
+		{
+			quarantine_heart_rate_buffer[i] = quarantine_heart_rate_buffer[i+1];
+		}
+		// add value
+		quarantine_heart_rate_buffer[REGULARANDQUARANTINEBUFFERLENGTH - 1] = new_heart_rate;
+		// calculate average of quarantine buffer
+		quarantine_average = hr_calculate_average(quarantine_heart_rate_buffer, REGULARANDQUARANTINEBUFFERLENGTH);
+
+		// check if we have to open quarantine ********************************
+
+		// check the deviation of quarantine buffer content from a quarantine mean
+		int deviationOk = 1;
+		int i = 0;
+		while (deviationOk && (i < REGULARANDQUARANTINEBUFFERLENGTH))
+		{
+			if (abs_dbl((quarantine_heart_rate_buffer[i] - quarantine_average) * 100 / quarantine_average) > MAXHEARTRATEDEVIATION)
+				   deviationOk = 0;
+			else
+				   i++;
+		}
+
+
+		// if deviation ok, open quarantine (copy quarantine buffer in
+		// regular buffer)
+		if (deviationOk)
+		{
+			for (int i = 0; i < REGULARANDQUARANTINEBUFFERLENGTH; i++)
+				regular_heart_rate_buffer[i] = quarantine_heart_rate_buffer[i];
+			regular_average = quarantine_average;
+		}
+	}// end else
 
 
 }// end heartRateCalculate

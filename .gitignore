@@ -7,5 +7,7 @@ RemoteSystemsTempFiles/**/*
 **/*.bin
 **/*.list
 **/*.launch
+**/*.mk
+
 
 
