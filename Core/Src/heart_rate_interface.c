@@ -5,6 +5,7 @@
 
 //debug
 #include "usart.h"
+#include "gpio.h"
 
 
 void heart_rate_action()
@@ -16,6 +17,9 @@ void heart_rate_action()
 
 		uint32_t new_rr_interval = qrs_get_new_rr_interval();
 		hr_set_new_rr_interval(new_rr_interval);
+		HAL_GPIO_WritePin(GPIOC, blue_led_Pin, GPIO_PIN_SET);
+		HAL_GPIO_WritePin(GPIOC, red_led_Pin, GPIO_PIN_SET);
+		HAL_GPIO_WritePin(GPIOC, green_led_Pin, GPIO_PIN_RESET);
 		heart_rate_calculate();
 	}
 }

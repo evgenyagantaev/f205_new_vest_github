@@ -1,6 +1,7 @@
 #include "main.h"
 #include "stm32f2xx_it.h"
 #include "usart.h"
+#include "gpio.h"
 
 #include "timer_250hz_interface.h"
 
@@ -21,14 +22,17 @@ void NMI_Handler(void)
   */
 void HardFault_Handler(void)
 {
-  /* USER CODE BEGIN HardFault_IRQn 0 */
+	// off green and red
+	HAL_GPIO_WritePin(GPIOC, red_led_Pin, GPIO_PIN_SET);
+	HAL_GPIO_WritePin(GPIOC, green_led_Pin, GPIO_PIN_SET);
 
-  /* USER CODE END HardFault_IRQn 0 */
-  while (1)
-  {
-    /* USER CODE BEGIN W1_HardFault_IRQn 0 */
-    /* USER CODE END W1_HardFault_IRQn 0 */
-  }
+	while (1)
+	{
+		HAL_GPIO_WritePin(GPIOC, blue_led_Pin, GPIO_PIN_RESET);
+		for(volatile long i=0; i<1500000; i++);
+		HAL_GPIO_WritePin(GPIOC, blue_led_Pin, GPIO_PIN_SET);
+		for(volatile long i=0; i<1500000; i++);
+	}
 }
 
 /**

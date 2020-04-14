@@ -99,10 +99,19 @@ int main(void)
 		HAL_Delay(500);
 		//*/
 
+
 		timer_250hz_action();
+
 		power_button_action();
+
 		isoline_action();
+		HAL_GPIO_WritePin(GPIOC, blue_led_Pin, GPIO_PIN_RESET);
+		HAL_GPIO_WritePin(GPIOC, red_led_Pin, GPIO_PIN_SET);
+		HAL_GPIO_WritePin(GPIOC, green_led_Pin, GPIO_PIN_SET);
 		qrs_action();
+		HAL_GPIO_WritePin(GPIOC, blue_led_Pin, GPIO_PIN_SET);
+		HAL_GPIO_WritePin(GPIOC, red_led_Pin, GPIO_PIN_RESET);
+		HAL_GPIO_WritePin(GPIOC, green_led_Pin, GPIO_PIN_SET);
 		heart_rate_action();
 
 	}

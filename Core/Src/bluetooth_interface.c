@@ -8,7 +8,7 @@
 void bluetooth_obj_init()
 {
 	//----------------------- initialization ------------------------------------
-
+	/*
 	sprintf(message, "^#^$^%%");
 	HAL_UART_Transmit(&huart1, (uint8_t *)message, strlen(message), 500);  //send escape sequence if connection is active
 	for(volatile long i=0; i<40000000; i++); //wait some time with no data to enter command mode if connection is active
@@ -36,7 +36,8 @@ void bluetooth_obj_init()
 	sprintf(message, "AT+AB Reset\r\n");
 	HAL_UART_Transmit(&huart1, (uint8_t *)message, strlen(message), 500); //reset bt
 	for(volatile long i=0; i<80000000; i++);
-
+	*/
 	//------------------------------------------------------------------------------------------------------------------------------------------->>>>>>>>>>>>
 
+	UNUSED(message);
 }
