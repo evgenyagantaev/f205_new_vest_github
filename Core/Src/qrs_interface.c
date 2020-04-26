@@ -13,12 +13,10 @@ void qrs_action()
 		if(qrs_get_local_buffer_ready_flag())
 			qrsDetect();
 
-
+		UNUSED(message);
 		//*
-		sprintf(message, "%uI%u\r\n", (unsigned int)qrs_window[0], (unsigned int)isoline_window[0]);
-		//sprintf(message, "%dI%d\r\n", qrs_window[0] - isoline_window[0], 0);
-		//sprintf(message, "%dI%d\r\n", isoline_window[0], isoline_window[0]);
-		HAL_UART_Transmit(&huart1, (uint8_t *)message, strlen(message), 500);  // for production board
+		//sprintf(message, "%uI%u\r\n", (unsigned int)qrs_window[0], (unsigned int)isoline_window[0]);
+		//HAL_UART_Transmit(&huart1, (uint8_t *)message, strlen(message), 500);  // for production board
 
 		/*
 		if(markers[0] == WHITEMARKER)

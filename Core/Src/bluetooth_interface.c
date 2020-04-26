@@ -39,5 +39,13 @@ void bluetooth_obj_init()
 	*/
 	//------------------------------------------------------------------------------------------------------------------------------------------->>>>>>>>>>>>
 
+	sprintf(message, "AT+AB EraseBondTable\r\n");
+	HAL_UART_Transmit(&huart1, (uint8_t *)message, strlen(message), 500); //reset bt
+	for(volatile long i=0; i<1000000; i++);
+
+	sprintf(message, "AT+AB Reset\r\n");
+	HAL_UART_Transmit(&huart1, (uint8_t *)message, strlen(message), 500); //reset bt
+	for(volatile long i=0; i<80000000; i++);
+
 	UNUSED(message);
 }

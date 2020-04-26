@@ -67,12 +67,17 @@ int main(void)
 
 	HAL_GPIO_WritePin(GPIOC, blue_led_Pin, GPIO_PIN_RESET);
 
+
+
 	/* Disable SysTick Interrupt */
 	SysTick->CTRL &= ~SysTick_CTRL_TICKINT_Msk;
 
 	ecg_ring_buffer_object_init();
 	bluetooth_obj_init();
 	ad7792_object_init();
+
+	//while(1);
+
 	heart_rate_init();
 	timer_250hz_object_init();
 	timer_250hz_start();
